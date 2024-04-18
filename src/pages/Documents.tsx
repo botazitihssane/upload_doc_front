@@ -15,7 +15,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle, AppBar, Container, Toolbar, Menu, MenuItem, Tooltip, Avatar,
+    DialogTitle, AppBar, Container, Toolbar, Menu, MenuItem, Avatar, Tooltip,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
@@ -32,7 +32,6 @@ import AddDocumentModal from "./AddDocumentModal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
 
 const pages = ["Documents", "User", "Acces"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -67,6 +66,7 @@ function Documents() {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [deletingDocumentId, setDeletingDocumentId] = useState<string>("");
 
+
     const [shareModalOpen, setShareModalOpen] = useState(false);
 
     const loadDocuments = (
@@ -99,6 +99,7 @@ function Documents() {
         setSelectedDocument(document);
         setModalOpen(true);
     };
+
 
     const handleModalClose = () => {
         setModalOpen(false);
@@ -202,7 +203,6 @@ function Documents() {
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
-
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
