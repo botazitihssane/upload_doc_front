@@ -25,13 +25,14 @@ import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DocumentsDetails from "./DocumentsDetails";
 import AdvancedSearch from "./AdvancedSearch";
-import ShareIcon from '@mui/icons-material/Share';
 import ShareDoc from "./ShareDoc";
-
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import AddDocumentModal from "./AddDocumentModal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import RevokeDoc from "./RevokeDoc";
 
 const pages = ["Documents", "User", "Acces"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -68,6 +69,8 @@ function Documents() {
 
 
     const [shareModalOpen, setShareModalOpen] = useState(false);
+
+    const [revokeModalOpen, setRevokeModalOpen] = useState(false);
 
     const loadDocuments = (
         id: string = "",
@@ -209,6 +212,16 @@ function Documents() {
     const reloadDocuments = () => {
         loadDocuments(searchID, searchNom, searchDate, searchType);
     };
+
+    const handleRevoke = (document: Document) => {
+        setSelectedDocument(document);
+        setRevokeModalOpen(true);
+    }
+
+    const handleRevokeClose = () => {
+        setRevokeModalOpen(false);
+    }
+
     return (
         <div>
             <AppBar position="static">
@@ -415,16 +428,16 @@ function Documents() {
                     alignItems: "center",
                 }}
             >
-                <TableContainer component={Paper} sx={{maxWidth: 1000}}>
-                    <Table sx={{maxWidth: 1000}} aria-label="simple table">
+                <TableContainer component={Paper} sx={{maxWidth: 1200}}>
+                    <Table sx={{maxWidth: 1200}} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID du document</TableCell>
-                                <TableCell align="right">Nom du document</TableCell>
-                                <TableCell align="right">Type du document</TableCell>
-                                <TableCell align="right">Date de création</TableCell>
-                                <TableCell align="right">Détails</TableCell>
-                                <TableCell align="right">Actions</TableCell>
+                                <TableCell align="center">Nom du document</TableCell>
+                                <TableCell align="center">Type du document</TableCell>
+                                <TableCell align="center">Date de création</TableCell>
+                                <TableCell align="center">Détails</TableCell>
+                                <TableCell align="center">Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -454,9 +467,13 @@ function Documents() {
                                             color="error"
                                             onClick={() => handleDelete(row.id)}
                                         />{" "}
-                                        <ShareIcon
+                                        <PersonAddAlt1Icon
                                             color={"warning"}
                                             onClick={() => handleShare(row)}
+                                        />
+                                        <PersonRemoveIcon
+                                            color={"info"}
+                                            onClick={() => handleRevoke(row)}
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -478,6 +495,11 @@ function Documents() {
                 <ShareDoc
                     open={shareModalOpen}
                     handleClose={handleShareClose}
+                    document={selectedDocument}
+                />
+                <RevokeDoc
+                    open={revokeModalOpen}
+                    handleClose={handleRevokeClose}
                     document={selectedDocument}
                 />
                 <Dialog
