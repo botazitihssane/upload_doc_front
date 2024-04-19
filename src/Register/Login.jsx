@@ -39,7 +39,7 @@ function Login() {
     })
     .catch(error => {
       if (error.response) {
-        // Handle different error status codes
+      
         if (!error.response.status === 200) {
           setMessage('Email Already Exist');
         } else {
