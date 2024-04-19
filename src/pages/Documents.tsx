@@ -77,21 +77,30 @@ function Documents() {
   const [deletingDocumentId, setDeletingDocumentId] = useState<string>("");
 
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [email, setEmail] = useState("");
 
   const [revokeModalOpen, setRevokeModalOpen] = useState(false);
   const handleLogout = () => {
     navigate("/");
   };
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
   const loadDocuments = (
     id: string = "",
     nom: string = "",
     date: string = "",
-    type: string = ""
+    type: string = "",
+    email: string = ""
   ) => {
     const queryParams = new URLSearchParams({
       nom,
       dateCreation: date,
       type,
+      email,
     });
 
     fetch(`http://localhost:8081/api/document/search?${queryParams.toString()}`)
@@ -104,9 +113,9 @@ function Documents() {
     if (searchID) {
       loadDocumentById(searchID);
     } else {
-      loadDocuments(searchID, searchNom, searchDate, searchType);
+      loadDocuments(searchID, searchNom, searchDate, searchType, email);
     }
-  }, [searchID, searchNom, searchDate, searchType]);
+  }, [searchID, searchNom, searchDate, searchType, email]);
 
   const handleInfoClick = (document: Document) => {
     setSelectedDocument(document);
@@ -151,7 +160,7 @@ function Documents() {
     if (searchID) {
       loadDocumentById(searchID);
     } else {
-      loadDocuments(searchID, searchNom, searchDate, searchType);
+      loadDocuments(searchID, searchNom, searchDate, searchType, email);
     }
   };
 
@@ -192,7 +201,7 @@ function Documents() {
         setSnackbarMessage("Document deleted successfully");
         setSnackbarOpen(true);
 
-        loadDocuments(searchID, searchNom, searchDate, searchType);
+        loadDocuments(searchID, searchNom, searchDate, searchType, email);
       })
       .catch((error) => console.error("Error deleting document:", error))
       .finally(() => {
@@ -235,7 +244,7 @@ function Documents() {
     setIsModalOpen(false);
   };
   const reloadDocuments = () => {
-    loadDocuments(searchID, searchNom, searchDate, searchType);
+    loadDocuments(searchID, searchNom, searchDate, searchType, email);
   };
 
   const handleRevoke = (document: Document) => {

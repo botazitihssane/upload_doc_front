@@ -8,7 +8,7 @@ import {
   Snackbar,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { Metadata } from "../types/Metadata";
@@ -33,14 +33,21 @@ function AddDocumentModal({
   const [snackbarMessageAdd, setSnackbarMessageAdd] = useState("");
 
   const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
   const [type, setType] = useState("");
   const [dateCreation, setDateCreation] = useState("");
 
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("");
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedEmail) {
+      setEmail(storedEmail);
+    }
+  }, []);
+
   const handleSave = async () => {
     try {
-      // Convert metadataList to a map of key-value pairs
       const metadataMap = metadataList.reduce<{ [key: string]: string }>(
         (acc, cur) => {
           acc[cur.cle] = cur.valeur;
@@ -49,10 +56,10 @@ function AddDocumentModal({
         {}
       );
 
-      // Construct form data
       const formData = new FormData();
       formData.append("nom", nom);
       formData.append("type", type);
+      formData.append("email", email);
       formData.append("dateCreation", dateCreation);
       formData.append("metadata", JSON.stringify(metadataMap)); // Convert to JSON string
       if (file) {

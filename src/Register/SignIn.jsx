@@ -12,7 +12,11 @@ function SignIn() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-
+  const handleSuccessfulSignIn = (email) => {
+   
+    localStorage.setItem('userEmail', email);
+  };
+  
   const handleSignIn = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -23,6 +27,7 @@ function SignIn() {
         setLoading(false);
         if (response.status === 200 && response.data === 'User authenticated successfully!') {
             navigate('/docs');
+            handleSuccessfulSignIn(email);
         }
       })
       .catch(error => {
