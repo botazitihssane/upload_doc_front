@@ -190,17 +190,22 @@ function Documents() {
         fetch(`http://localhost:8081/api/document/download/${id}`, {
             method: "GET",
         })
-            .then((response) => response.blob())
-            .then((blob) => {
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute("download", "document.pdf");
+            .then((response) => {
+                const fileExtension = response.headers.get("File-Extension");
+                return response.blob().then((blob) => ({
+                    blob,
+                    fileExtension
+                }));
+            }).then(({blob, fileExtension}) => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `document.${fileExtension}`);
 
-                document.body.appendChild(link);
-                link.click();
-                link.parentNode?.removeChild(link);
-            })
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode?.removeChild(link);
+        })
             .catch((error) => console.error("Error downloading document:", error));
     };
     const handleOpenModal = () => {
